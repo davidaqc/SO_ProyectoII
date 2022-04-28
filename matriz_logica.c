@@ -15,7 +15,7 @@ struct Marciano {
 };
 
 // Matrix size
-#define N 4
+#define N 10
 
 //x positive is to the right
 //y positive is down
@@ -40,6 +40,10 @@ void solve_matrix(int matrix[N][N], struct Marciano marciano){
     if(matrix[0][0]==1){
         matrix[0][0]=marciano.id;
     }
+    else{
+        printf("Space not available");
+        return;
+    }
 
 
     //move martian
@@ -59,7 +63,7 @@ void solve_matrix(int matrix[N][N], struct Marciano marciano){
         printf("************************\n");
 
         //moves →
-        if(marciano.posX<N && random_in_range<=25 && matrix[marciano.posY][marciano.posX+1]==1){
+        if(marciano.posX<N && random_in_range<=35 && matrix[marciano.posY][marciano.posX+1]==1){
             matrix[marciano.posY][marciano.posX]=1;
             matrix[marciano.posY][marciano.posX+1]=marciano.id;
             marciano.posX++;
@@ -67,7 +71,7 @@ void solve_matrix(int matrix[N][N], struct Marciano marciano){
         }
 
         //moves ← 
-        else if(marciano.posX>0 && random_in_range>25 && random_in_range<=50 && matrix[marciano.posY][marciano.posX-1]==1){
+        else if(marciano.posX>0 && random_in_range>35 && random_in_range<=50 && matrix[marciano.posY][marciano.posX-1]==1){
             matrix[marciano.posY][marciano.posX]=1;
             matrix[marciano.posY][marciano.posX-1]=marciano.id;
             marciano.posX--;
@@ -75,7 +79,7 @@ void solve_matrix(int matrix[N][N], struct Marciano marciano){
         }
 
         //moves ↑
-        else if(marciano.posY>0 && random_in_range>50 && random_in_range<=75 && matrix[marciano.posY-1][marciano.posX]==1){
+        else if(marciano.posY>0 && random_in_range>50 && random_in_range<=65 && matrix[marciano.posY-1][marciano.posX]==1){
             matrix[marciano.posY][marciano.posX]=1;
             matrix[marciano.posY-1][marciano.posX]=marciano.id;
             marciano.posY--;
@@ -83,7 +87,7 @@ void solve_matrix(int matrix[N][N], struct Marciano marciano){
         }
 
         //moves ↓
-        else if(marciano.posY<N && random_in_range>75 && random_in_range<=99 && matrix[marciano.posY+1][marciano.posX]==1){
+        else if(marciano.posY<N && random_in_range>65 && random_in_range<=99 && matrix[marciano.posY+1][marciano.posX]==1){
             matrix[marciano.posY][marciano.posX]=1;
             matrix[marciano.posY+1][marciano.posX]=marciano.id;
             marciano.posY++;
@@ -96,7 +100,7 @@ void solve_matrix(int matrix[N][N], struct Marciano marciano){
         }
 
     //usleep(1000000);
-    usleep(900000);
+    usleep(100000);
 
 
     }
@@ -104,10 +108,16 @@ void solve_matrix(int matrix[N][N], struct Marciano marciano){
 
 
 int main() {
-    int matrix[N][N] = { { 1, 0, 0, 0 },
-                       { 1, 1, 0, 1 },
-                       { 0, 1, 0, 0 },
-                       { 1, 1, 1, 1 } };
+    int matrix[N][N] = { { 1, 1, 0, 0 ,0 ,0 ,0 ,0 ,0 ,0},
+                         { 0, 1, 0, 0 ,0 ,0 ,1 ,1 ,0 ,0},
+                         { 0, 1, 1, 1 ,1 ,1 ,1 ,0 ,0 ,0},
+                         { 0, 0, 1, 0 ,0 ,0 ,0 ,0 ,0 ,0},
+                         { 1, 1, 1, 1 ,0 ,0 ,0 ,0 ,0 ,0},
+                         { 1, 0, 0, 1 ,0 ,0 ,1 ,1 ,1 ,0},
+                         { 1, 0, 1, 1 ,1 ,1 ,1 ,0 ,1 ,0},
+                         { 0, 0, 0, 1 ,0 ,0 ,1 ,0 ,1 ,0},
+                         { 0, 0, 0, 1 ,0 ,0 ,1 ,0 ,1 ,0},
+                         { 0, 0, 0, 0 ,0 ,1 ,1 ,0 ,1 ,1}};
 
     struct Marciano marciano1 ; //= {10,0,0,50,2};
     
