@@ -5,6 +5,7 @@
 #include<stdlib.h> // in C, for rand() 
 #include <unistd.h>
 #include<time.h>    //for time()
+#include "matriz_logica.h"
 
 struct Marciano {
   int posX;
@@ -16,6 +17,20 @@ struct Marciano {
 
 // Matrix size
 #define N 10
+
+//matrix that represents the board
+int matrix[N][N] = { { 1, 1, 0, 0 ,0 ,0 ,0 ,0 ,0 ,0},
+                    { 0, 1, 0, 0 ,0 ,0 ,1 ,1 ,0 ,0},
+                    { 0, 1, 1, 1 ,1 ,1 ,1 ,0 ,0 ,0},
+                    { 0, 0, 1, 0 ,0 ,0 ,0 ,0 ,0 ,0},
+                    { 1, 1, 1, 1 ,0 ,0 ,0 ,0 ,0 ,0},
+                    { 1, 0, 0, 1 ,0 ,0 ,1 ,1 ,1 ,0},
+                    { 1, 0, 1, 1 ,1 ,1 ,1 ,0 ,1 ,0},
+                    { 0, 0, 0, 1 ,0 ,0 ,1 ,0 ,1 ,0},
+                    { 0, 0, 0, 1 ,0 ,0 ,1 ,0 ,1 ,0},
+                    { 0, 0, 0, 0 ,0 ,1 ,1 ,0 ,1 ,1}};
+
+
 
 //x positive is to the right
 //y positive is down
@@ -34,15 +49,26 @@ void printCurrentMatrix(int sol[N][N])
 }
 
 //helps 1 martian to get out of the labyrinth
-void solve_matrix(int matrix[N][N], struct Marciano marciano){
+void solve_matrix(struct Marciano marciano){
     //loads martian in first position if available
 
-    if(matrix[0][0]==1){
+    /*if(matrix[0][0]==1){
         matrix[0][0]=marciano.id;
     }
     else{
         printf("Space not available");
         return;
+    }*/
+
+
+
+
+    //waits until first space is available
+    while(1==1){
+        if(matrix[0][0]==1){
+            matrix[0][0]=marciano.id;
+            break;
+        } 
     }
 
 
@@ -63,7 +89,7 @@ void solve_matrix(int matrix[N][N], struct Marciano marciano){
         printf("************************\n");
 
         //moves →
-        if(marciano.posX<N && random_in_range<=35 && matrix[marciano.posY][marciano.posX+1]==1){
+        if(marciano.posX<N && random_in_range<=25 && matrix[marciano.posY][marciano.posX+1]==1){
             matrix[marciano.posY][marciano.posX]=1;
             matrix[marciano.posY][marciano.posX+1]=marciano.id;
             marciano.posX++;
@@ -71,7 +97,7 @@ void solve_matrix(int matrix[N][N], struct Marciano marciano){
         }
 
         //moves ← 
-        else if(marciano.posX>0 && random_in_range>35 && random_in_range<=50 && matrix[marciano.posY][marciano.posX-1]==1){
+        else if(marciano.posX>0 && random_in_range>25 && random_in_range<=50 && matrix[marciano.posY][marciano.posX-1]==1){
             matrix[marciano.posY][marciano.posX]=1;
             matrix[marciano.posY][marciano.posX-1]=marciano.id;
             marciano.posX--;
@@ -79,7 +105,7 @@ void solve_matrix(int matrix[N][N], struct Marciano marciano){
         }
 
         //moves ↑
-        else if(marciano.posY>0 && random_in_range>50 && random_in_range<=65 && matrix[marciano.posY-1][marciano.posX]==1){
+        else if(marciano.posY>0 && random_in_range>50 && random_in_range<=75 && matrix[marciano.posY-1][marciano.posX]==1){
             matrix[marciano.posY][marciano.posX]=1;
             matrix[marciano.posY-1][marciano.posX]=marciano.id;
             marciano.posY--;
@@ -100,37 +126,16 @@ void solve_matrix(int matrix[N][N], struct Marciano marciano){
         }
 
     //usleep(1000000);
-    usleep(100000);
+    usleep(1000000);
 
 
     }
+    printf("El marciano termino");
+
+    matrix[N-1][N-1]=0;
+
+
 }
 
 
-int main() {
-    int matrix[N][N] = { { 1, 1, 0, 0 ,0 ,0 ,0 ,0 ,0 ,0},
-                         { 0, 1, 0, 0 ,0 ,0 ,1 ,1 ,0 ,0},
-                         { 0, 1, 1, 1 ,1 ,1 ,1 ,0 ,0 ,0},
-                         { 0, 0, 1, 0 ,0 ,0 ,0 ,0 ,0 ,0},
-                         { 1, 1, 1, 1 ,0 ,0 ,0 ,0 ,0 ,0},
-                         { 1, 0, 0, 1 ,0 ,0 ,1 ,1 ,1 ,0},
-                         { 1, 0, 1, 1 ,1 ,1 ,1 ,0 ,1 ,0},
-                         { 0, 0, 0, 1 ,0 ,0 ,1 ,0 ,1 ,0},
-                         { 0, 0, 0, 1 ,0 ,0 ,1 ,0 ,1 ,0},
-                         { 0, 0, 0, 0 ,0 ,1 ,1 ,0 ,1 ,1}};
-
-    struct Marciano marciano1 ; //= {10,0,0,50,2};
-    
-    marciano1.energy= 10;
-    marciano1.posX=0;
-    marciano1.posY=0;
-    marciano1.period=50;
-    marciano1.id=2;
-
-    solve_matrix(matrix,marciano1);
-
-    printCurrentMatrix(matrix);
-
-    return 0;
-}
 
