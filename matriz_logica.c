@@ -64,12 +64,18 @@ void solve_matrix(struct Marciano marciano){
 
 
     //waits until first space is available
+    /*
     while(1==1){
         if(matrix[0][0]==1){
             matrix[0][0]=marciano.id;
             break;
         } 
+    }*/
+    while(matrix[0][0]!=1){
+        ;//NOP, this just waits for the position to be freed
     }
+
+    matrix[0][0]=marciano.id;
 
 
     //move martian
@@ -126,7 +132,7 @@ void solve_matrix(struct Marciano marciano){
         }
 
     //usleep(1000000);
-    usleep(1000000);
+    usleep(100000);
 
 
     }
