@@ -2,6 +2,7 @@
 //http://www.cse.cuhk.edu.hk/~ericlo/teaching/os/lab/9-PThread/Pass.html
 //https://www.geeksforgeeks.org/multithreading-c-2/
 //https://stackoverflow.com/questions/35403892/creating-threads-in-a-loop
+//https://stackoverflow.com/questions/13339462/thread-stops-randomly-in-the-middle-of-a-while-loop
 
 /*
 gcc -c matriz_logica.c
