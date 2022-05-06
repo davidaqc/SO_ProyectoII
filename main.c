@@ -18,7 +18,7 @@ gcc -o principal matriz_logica.o main.o -lpthread
 #include <unistd.h>
 #include "matriz_logica.h"
 #include <pthread.h>
-//gcc -o principal matriz_logica.o main.o
+
 
 // Matrix size
 #define N 10
