@@ -1,6 +1,8 @@
 //https://beginnersbook.com/2014/01/2d-arrays-in-c-example/
 //https://stackoverflow.com/questions/7343833/srand-why-call-it-only-once
 
+#include <gtk/gtk.h>
+
 #include <stdio.h>
 #include<stdlib.h> // in C, for rand() 
 #include <unistd.h>
@@ -14,6 +16,8 @@ struct Marciano {
   int period;
   int id;
 };
+
+int moves = 0;
 
 // Matrix size
 #define N 10
@@ -49,8 +53,10 @@ void printCurrentMatrix(int sol[N][N])
 }
 
 //helps 1 martian to get out of the labyrinth
-void solve_matrix(struct Marciano marciano){
+void solve_matrix(struct Marciano marciano, GtkWidget *fixed, GtkWidget *martian, GtkWidget *label){
     //loads martian in first position if available
+
+    
 
     /*if(matrix[0][0]==1){
         matrix[0][0]=marciano.id;
@@ -63,7 +69,7 @@ void solve_matrix(struct Marciano marciano){
 
 
 
-    //waits until first space is available
+    //waits until first spacec is available
     /*
     while(1==1){
         if(matrix[0][0]==1){
@@ -71,11 +77,15 @@ void solve_matrix(struct Marciano marciano){
             break;
         } 
     }*/
+
+    //TEEEEESST GUI -DELETE
+    marciano.id = 2;
+
     while(matrix[0][0]!=1){
         ;//NOP, this just waits for the position to be freed
     }
 
-    matrix[0][0]=marciano.id;
+    matrix[0][0]= marciano.id;
 
 
     //move martian
@@ -91,14 +101,19 @@ void solve_matrix(struct Marciano marciano){
         printf("%d",random_in_range);
         printf("\n");*/
 
+        /*printf("ID: %d\n", marciano.id);
+        printf("X: %d\n", marciano.posX);
+        printf("Y: %d\n", marciano.posY);
+
         printCurrentMatrix(matrix);
-        printf("************************\n");
+        printf("************************\n");*/
 
         //moves →
         if(marciano.posX<N && random_in_range<=25 && matrix[marciano.posY][marciano.posX+1]==1){
             matrix[marciano.posY][marciano.posX]=1;
             matrix[marciano.posY][marciano.posX+1]=marciano.id;
             marciano.posX++;
+            moves++;
            // printf("1\n");
         }
 
@@ -107,6 +122,7 @@ void solve_matrix(struct Marciano marciano){
             matrix[marciano.posY][marciano.posX]=1;
             matrix[marciano.posY][marciano.posX-1]=marciano.id;
             marciano.posX--;
+            moves++;
            // printf("2\n");
         }
 
@@ -115,6 +131,7 @@ void solve_matrix(struct Marciano marciano){
             matrix[marciano.posY][marciano.posX]=1;
             matrix[marciano.posY-1][marciano.posX]=marciano.id;
             marciano.posY--;
+            moves++;
            //printf("3\n");
         }
 
@@ -123,6 +140,7 @@ void solve_matrix(struct Marciano marciano){
             matrix[marciano.posY][marciano.posX]=1;
             matrix[marciano.posY+1][marciano.posX]=marciano.id;
             marciano.posY++;
+            moves++;
             //printf("4\n");
         }
         //NOP
@@ -131,12 +149,21 @@ void solve_matrix(struct Marciano marciano){
             ;
         }
 
-    //usleep(1000000);
-    usleep(100000);
+    gchar *display;
+    display = g_strdup_printf("%d", moves);         //convert num to str
+    gtk_label_set_text (GTK_LABEL(label), display); //set label to "display"
+    g_free(display);                              //free display
+
+    gtk_fixed_move(GTK_FIXED(fixed), martian, marciano.posX*20, marciano.posY*20);
+    
+
+    usleep(10000);
+    //usleep(200000/2);
 
 
     }
-    printf("El marciano termino");
+    g_print("El marciano termino\n");
+    gtk_fixed_move(GTK_FIXED(fixed), martian, marciano.posX*20, marciano.posY*20);
 
     matrix[N-1][N-1]=0;
 
