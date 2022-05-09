@@ -91,6 +91,10 @@ void solve_matrix(struct Marciano marciano){
         printf("%d",random_in_range);
         printf("\n");*/
 
+        printf("ID: %d\n", marciano.id);
+        printf("X: %d\n", marciano.posX);
+        printf("Y: %d\n", marciano.posY);
+
         printCurrentMatrix(matrix);
         printf("************************\n");
 
