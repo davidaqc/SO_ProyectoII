@@ -157,7 +157,7 @@ void solve_matrix(struct Marciano marciano, GtkWidget *fixed, GtkWidget *martian
     gtk_fixed_move(GTK_FIXED(fixed), martian, marciano.posX*20, marciano.posY*20);
     
 
-    usleep(10000);
+    usleep(1000000);
     //usleep(200000/2);
 
 
