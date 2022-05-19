@@ -38,14 +38,18 @@ int start_martian_no = 0;
 GtkWidget *window;
 GtkWidget *fixed;
 GtkWidget *img;
-GtkWidget *label;
-GtkWidget *martian;
+GtkWidget *label[10];
+GtkWidget *martian[10];
 
 int started = 0;
 
 int no_procesos;
 
+int id = 0;
+
 int x = 60;
+
+int martian_Started = -1;
 
 int laberinto[N][N] = {{1, 1, 0, 0, 0, 0, 0, 0, 0, 0},
                        {1, 1, 0, 0, 0, 0, 1, 1, 0, 0},
@@ -59,9 +63,12 @@ int laberinto[N][N] = {{1, 1, 0, 0, 0, 0, 0, 0, 0, 0},
                        {0, 0, 0, 0, 0, 1, 1, 0, 1, 1}};
 
 // function that calls the solver file
-void *call_solve()
+void *call_solve(void * arg)
 {
-    solve_matrix(marcianos[start_martian_no], fixed, martian, label);
+    martian_Started++;
+    solve_matrix(marcianos[start_martian_no], fixed, martian[martian_Started]);
+    
+    //solve_matrix(marcianos[start_martian_no], fixed, martian[*iptr], label[*iptr]);
     return NULL;
 }
 
@@ -82,8 +89,6 @@ int main(int argc, char **argv)
     fixed = gtk_fixed_new();
     gtk_container_add(GTK_CONTAINER(window), fixed);
 
-    label = gtk_label_new("0");
-
     char *type = "free.jpg";
 
     for (int i = 0; i < N; i++)
@@ -97,11 +102,17 @@ int main(int argc, char **argv)
             img = gtk_image_new_from_file(type);
             gtk_fixed_put(GTK_FIXED(fixed), img, 20 * j, 20 * i);
         }
-    }
+    }  
 
-    martian = gtk_image_new_from_file("martian.jpg");
-    gtk_fixed_put(GTK_FIXED(fixed), martian, 0, 0);
-    gtk_fixed_put(GTK_FIXED(fixed), label, 300, 0);    
+
+    for(int martians = 0; martians < no_procesos; martians++){
+        martian[martians] = gtk_image_new_from_file("martian.jpg");
+        gtk_fixed_put(GTK_FIXED(fixed), martian[martians], 0, 0);
+
+        /*label[martians] = gtk_label_new("Marciano ");
+        gtk_fixed_put(GTK_FIXED(fixed), label[martians], 200, 20 * martians);*/
+    } 
+        
 
     gdk_threads_add_idle(threadController, NULL);
     // gdk_threads_add_idle(updatePosition, martian);
@@ -116,6 +127,7 @@ void destroy(GtkWidget *widget, gpointer data)
     gtk_main_quit();
 }
 
+
 gboolean threadController(gpointer data)
 {
     if (started == 0)
@@ -125,25 +137,44 @@ gboolean threadController(gpointer data)
         {
 
             // create new martian
-            struct Marciano marciano = {0, 0, 0, 0, i + 2};
+            struct Marciano marciano = {0, 0, 0, 0, i};
             marcianos[i] = marciano;
 
-            printf("ID MARTIAN %d\n", marcianos[0].id);
+            //printf("ID MARTIAN %d\n", marcianos[0].id);
 
             // create martian thread
             pthread_t threads[i];
 
-            pthread_create(&threads[i], NULL, call_solve, NULL);
+            int v = i;
+
+            //martian[i] = gtk_image_new_from_file("martian.jpg");
+            //gtk_fixed_put(GTK_FIXED(fixed), martian[i], 0, 0);
+
+            //printf("Marciano creado\n");
+
+            //label[i] = gtk_label_new("Marciano ");
+            //gtk_fixed_put(GTK_FIXED(fixed), label[i], 300, 0);
+
+            /*gchar *display;
+            display = g_strdup_printf("Marciano numero: %d, movimientos: 0", i + 1);         //convert num to str
+            gtk_label_set_text (GTK_LABEL(label), display); //set label to "display"
+            g_free(display);                              //free display*/
+
+            pthread_create(&threads[i], NULL, call_solve,&v);
+            
 
             // so start_martian_no has time to update
             //usleep(9000000);
 
             start_martian_no++;
+            
         }
 
         for (int i = 0; i < no_procesos; ++i)
         {
             pthread_join(threads[i], NULL);
         }
+    }else{
+        return 0;
     }
 }

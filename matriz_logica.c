@@ -52,11 +52,11 @@ void printCurrentMatrix(int sol[N][N])
     }
 }
 
-//helps 1 martian to get out of the labyrinth
-void solve_matrix(struct Marciano marciano, GtkWidget *fixed, GtkWidget *martian, GtkWidget *label){
-    //loads martian in first position if available
+//void solve_matrix(struct Marciano marciano, GtkWidget *fixed, GtkWidget *martian, GtkWidget *label)
 
-    
+//helps 1 martian to get out of the labyrinth
+void solve_matrix(struct Marciano marciano, GtkWidget *fixed, GtkWidget *martian){
+    //loads martian in first position if available    
 
     /*if(matrix[0][0]==1){
         matrix[0][0]=marciano.id;
@@ -149,15 +149,17 @@ void solve_matrix(struct Marciano marciano, GtkWidget *fixed, GtkWidget *martian
             ;
         }
 
-    gchar *display;
-    display = g_strdup_printf("%d", moves);         //convert num to str
+    /*gchar *display;
+    display = g_strdup_printf("Martian %d: %d moves", numberMartian, moves);         //convert num to str
     gtk_label_set_text (GTK_LABEL(label), display); //set label to "display"
-    g_free(display);                              //free display
+    g_free(display);   */                       //free display
+
+
 
     gtk_fixed_move(GTK_FIXED(fixed), martian, marciano.posX*20, marciano.posY*20);
     
 
-    usleep(1000000);
+    usleep(100000);
     //usleep(200000/2);
 
 
