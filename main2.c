@@ -351,8 +351,27 @@ void solve_matrix(struct Marciano marciano, int burst)
         printCurrentMatrix(matrix);
         printf("************************\n");
 
+        //avoid the marcian getting stuck in the first posistion
+        if(marciano.posX==1 && marciano.posY==0 ){
+            matrix[marciano.posY][marciano.posX] = 1;
+            matrix[marciano.posY + 1][marciano.posX] = marciano.id;
+            marciano.posY++;
+        }
+
+        else if(marciano.posX==0 && marciano.posY==0){
+            matrix[marciano.posY][marciano.posX] = 1;
+            matrix[marciano.posY][marciano.posX + 1] = marciano.id;
+            marciano.posX++;
+        }
+
+        //martian finished:
+        else if(marciano.posX==(N-1) && marciano.posY==(N-1)){
+            matrix[marciano.posY][marciano.posX] = 1;
+            printf("El marciano completo el laberinto \n");
+        }
+
         // moves →
-        if (marciano.posX < N && random_in_range <= 25 && matrix[marciano.posY][marciano.posX + 1] == 1)
+        else if (marciano.posX < N && random_in_range <= 25 && matrix[marciano.posY][marciano.posX + 1] == 1)
         {
             matrix[marciano.posY][marciano.posX] = 1;
             matrix[marciano.posY][marciano.posX + 1] = marciano.id;
@@ -404,7 +423,7 @@ void solve_matrix(struct Marciano marciano, int burst)
         times++;
         printf("Times: %d  \n", times);
     }
-    printf("El marciano termino\n");
+    printf("El tiempo para este marciano termino\n");
 
     matrix[N - 1][N - 1] = 0;
 }
