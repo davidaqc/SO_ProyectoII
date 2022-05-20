@@ -53,6 +53,11 @@ void *call_solve(){
     return NULL;
 }
 
+struct PCB
+{
+    int pid, arrival, burst, turnaround;
+};
+
 
 int main() {
     //user input with number of processes

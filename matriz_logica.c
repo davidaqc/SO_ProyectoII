@@ -1,5 +1,4 @@
-//https://beginnersbook.com/2014/01/2d-arrays-in-c-example/
-//https://stackoverflow.com/questions/7343833/srand-why-call-it-only-once
+#include <gtk/gtk.h>
 
 #include <stdio.h>
 #include<stdlib.h> // in C, for rand() 
@@ -7,19 +6,13 @@
 #include<time.h>    //for time()
 #include "matriz_logica.h"
 
-struct Marciano {
-  int posX;
-  int posY;
-  int energy;
-  int period;
-  int id;
-};
+
+int moves = 0;
 
 // Matrix size
-#define N 10
-
+#define M 10
 //matrix that represents the board
-int matrix[N][N] = { { 1, 1, 0, 0 ,0 ,0 ,0 ,0 ,0 ,0},
+int matrix[M][M] = { { 1, 1, 0, 0 ,0 ,0 ,0 ,0 ,0 ,0},
                     { 0, 1, 0, 0 ,0 ,0 ,1 ,1 ,0 ,0},
                     { 0, 1, 1, 1 ,1 ,1 ,1 ,0 ,0 ,0},
                     { 0, 0, 1, 0 ,0 ,0 ,0 ,0 ,0 ,0},
@@ -38,19 +31,24 @@ int matrix[N][N] = { { 1, 1, 0, 0 ,0 ,0 ,0 ,0 ,0 ,0},
 //1 is the way
 //0 is blocked
 
+
 //Function to print the matrix
-void printCurrentMatrix(int sol[N][N])
+void printCurrentMatrix(int sol[M][M])
 {
-    for (int i = 0; i < N; i++) {
-        for (int j = 0; j < N; j++)
+    for (int i = 0; i < M; i++) {
+        for (int j = 0; j < M; j++)
             printf(" %d ", sol[i][j]);
         printf("\n");
     }
 }
 
+//void solve_matrix(struct Marciano marciano, GtkWidget *fixed, GtkWidget *martian, GtkWidget *label)
+
 //helps 1 martian to get out of the labyrinth
-void solve_matrix(struct Marciano marciano){
-    //loads martian in first position if available
+void solve_matrix(struct Marciano1 marciano, GtkWidget *fixed, GtkWidget *martian, int burst){
+
+    g_print("Hola David\n");
+    //loads martian in first position if available    
 
     /*if(matrix[0][0]==1){
         matrix[0][0]=marciano.id;
@@ -63,7 +61,7 @@ void solve_matrix(struct Marciano marciano){
 
 
 
-    //waits until first space is available
+    //waits until first spacec is available
     /*
     while(1==1){
         if(matrix[0][0]==1){
@@ -71,15 +69,19 @@ void solve_matrix(struct Marciano marciano){
             break;
         } 
     }*/
+
+    //TEEEEESST GUI -DELETE
+    marciano.id = 2;
+
     while(matrix[0][0]!=1){
         ;//NOP, this just waits for the position to be freed
     }
 
-    matrix[0][0]=marciano.id;
+    matrix[0][0]= marciano.id;
 
 
     //move martian
-    while(!(marciano.posX==(N-1) && marciano.posY==(N-1))){
+    while(!(marciano.posX==(M-1) && marciano.posY==(M-1))){
         //gives random number between 0-99
         //to generate random numbers. Generate "decent" random numbers in c seems awfully complicated
         srand(clock()); 
@@ -91,18 +93,18 @@ void solve_matrix(struct Marciano marciano){
         printf("%d",random_in_range);
         printf("\n");*/
 
-        printf("ID: %d\n", marciano.id);
+        /*printf("ID: %d\n", marciano.id);
         printf("X: %d\n", marciano.posX);
         printf("Y: %d\n", marciano.posY);
-
         printCurrentMatrix(matrix);
-        printf("************************\n");
+        printf("************************\n");*/
 
         //moves →
-        if(marciano.posX<N && random_in_range<=25 && matrix[marciano.posY][marciano.posX+1]==1){
+        if(marciano.posX<M && random_in_range<=25 && matrix[marciano.posY][marciano.posX+1]==1){
             matrix[marciano.posY][marciano.posX]=1;
             matrix[marciano.posY][marciano.posX+1]=marciano.id;
             marciano.posX++;
+            moves++;
            // printf("1\n");
         }
 
@@ -111,6 +113,7 @@ void solve_matrix(struct Marciano marciano){
             matrix[marciano.posY][marciano.posX]=1;
             matrix[marciano.posY][marciano.posX-1]=marciano.id;
             marciano.posX--;
+            moves++;
            // printf("2\n");
         }
 
@@ -119,14 +122,16 @@ void solve_matrix(struct Marciano marciano){
             matrix[marciano.posY][marciano.posX]=1;
             matrix[marciano.posY-1][marciano.posX]=marciano.id;
             marciano.posY--;
+            moves++;
            //printf("3\n");
         }
 
         //moves ↓
-        else if(marciano.posY<N && random_in_range>65 && random_in_range<=99 && matrix[marciano.posY+1][marciano.posX]==1){
+        else if(marciano.posY<M && random_in_range>65 && random_in_range<=99 && matrix[marciano.posY+1][marciano.posX]==1){
             matrix[marciano.posY][marciano.posX]=1;
             matrix[marciano.posY+1][marciano.posX]=marciano.id;
             marciano.posY++;
+            moves++;
             //printf("4\n");
         }
         //NOP
@@ -135,17 +140,25 @@ void solve_matrix(struct Marciano marciano){
             ;
         }
 
-    //usleep(1000000);
+    /*gchar *display;
+    display = g_strdup_printf("Martian %d: %d moves", numberMartian, moves);         //convert num to str
+    gtk_label_set_text (GTK_LABEL(label), display); //set label to "display"
+    g_free(display);   */                       //free display
+
+
+
+    gtk_fixed_move(GTK_FIXED(fixed), martian, marciano.posX*20, marciano.posY*20);
+    
+
     usleep(100000);
+    //usleep(200000/2);
 
 
     }
-    printf("El marciano termino");
+    g_print("El marciano termino\n");
+    gtk_fixed_move(GTK_FIXED(fixed), martian, marciano.posX*20, marciano.posY*20);
 
-    matrix[N-1][N-1]=0;
+    matrix[M-1][M-1]=0;
 
 
 }
-
-
-
