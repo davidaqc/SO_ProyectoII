@@ -1,13 +1,14 @@
 // gcc -o srtf srtf.c
 // https://www.quora.com/How-do-I-write-a-C-program-to-implement-a-SRTF-Shortest-Remaining-Time-First-scheduling-algorithm-along-with-displaying-the-Gantt-chart
-
+/*gcc `pkg-config --cflags gtk+-3.0` -o srtf  srtf.c `pkg-config --libs gtk+-3.0` -export-dynamic*/
+#include <gtk/gtk.h>
 #include <stdio.h>
-
+static void activate (GtkApplication *app, gpointer user_data);
 int pointer, pre, a[15], b[15], r[15], count = 0, n, small, i, j, m, s = 0, k = 0, p[10], t[15] = {0}, w[15] = {0}, x, y, bs, temp, d = 0;
 
 float att = 0, awt = 0;
 
-int main()
+int main (int argc, char ** argv)
 
 {
 
@@ -147,6 +148,39 @@ int main()
     }
 
     printf("\n avarage waiting time :%f\n avarage turnaround time:%f \n \n", awt / n, att / n);
+ GtkApplication *app;
+    int ret;
+ app = gtk_application_new ("in.aducators", G_APPLICATION_FLAGS_NONE);
+ g_signal_connect (app, "activate", G_CALLBACK(activate), NULL);
+ ret = g_application_run (G_APPLICATION(app), argc, argv);
+ g_object_unref (app);
+ return ret;
+}
+static void activate (GtkApplication *app, gpointer user_data) {
+GtkWidget *window;
+GtkWidget *fixed;
+GtkWidget *img;
+GtkWidget *label;
+window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+gtk_window_set_title(GTK_WINDOW(window), "Window");
+gtk_window_set_default_size(GTK_WINDOW(window), 700, 400);
+fixed = gtk_fixed_new();
+gtk_container_add(GTK_CONTAINER(window), fixed);
+g_signal_connect(window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
+char str[12];
 
-    return 0;
+
+sprintf(str, "%d", p[0]);
+        label = gtk_label_new(str);
+        gtk_fixed_put(GTK_FIXED(fixed), label, 650 ,  20 );
+     for(i=0; i<36; i++){
+     sprintf(str, "%d", i);
+        label = gtk_label_new(str);
+        gtk_fixed_put(GTK_FIXED(fixed), label,i*18 , 350 );
+
+    }
+    
+ 
+        gtk_widget_show_all(window);
+  gtk_main();
 }
